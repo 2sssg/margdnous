@@ -1,2 +1,5 @@
-package com.example.margdnous.controller;public class ControllerBase {
+package com.example.margdnous.controller;
+
+public class ControllerBase {
+
 }
