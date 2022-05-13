@@ -1,11 +1,13 @@
 package com.example.margdnous.model;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@ToString
 public class Annotation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
