@@ -28,6 +28,7 @@ public class DB {
     public ResultSet selectQuery(String query){
         ResultSet resultSet=null;
         try{
+            log.info(query);
             resultSet = stmt.executeQuery(query);
         }catch (Exception e){
             log.error("        query Error");

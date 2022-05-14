@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface AnnotationReposiroty extends JpaRepository<Annotation,Long> {
     List<Annotation> findByCategory(String category);
+    Annotation findByLabelNAME(String label_name);
 
 }
