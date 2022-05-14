@@ -43,7 +43,7 @@ public class DBinit {
     }
     public void makeSqlFile() throws IOException, ParseException {
         makeSQL();
-        String filePath = "/margdnous/src/main/resources/import.sql";
+        String filePath = "/root/margdnous/src/main/resources/import.sql";
         File file = new File(filePath);
         file.delete();
         file = new File(filePath);
