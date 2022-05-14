@@ -56,7 +56,7 @@ public class MakeController {
     SenarioRepository senarioRepository;
 
 
-    public HashMap<String,JSONObject> unity(String labelname, X x, Y y, Z z, Hue h, SunAngle s) throws SQLException, JsonProcessingException, ParseException {
+    public JSONObject unity(String labelname, X x, Y y, Z z, Hue h, SunAngle s) throws SQLException, JsonProcessingException, ParseException {
         log.info("      temp 실행");
         JSONObject jsonObject = new JSONObject();
         HashMap<String, JSONObject> param = new HashMap<>();
@@ -85,9 +85,12 @@ public class MakeController {
 //        jsonObject.put("label_json",new Labels_json(labelname));
 //        jsonObject.put("sementic_json",new Sementic_json(labelname));
 //        jsonObject.put("random_json",new Random_json(x.getMax(), x.getMin(),  y.getMax(),  y.getMin() ,  z.getMax(),  z.getMin(),  h.getMax(),  h.getMin(), s.getHour() ,  s.getDayOfYear(),  s.getLatitude()));
-
+        JSONObject jsonObject1 = new JSONObject();
+        jsonObject1.put("labels_json",new Labels_json(labelname));
+        jsonObject1.put("semantic_json",new Sementic_json(labelname));
+        jsonObject1.put("random_json",new Random_json(x.getMax(), x.getMin(),  y.getMax(),  y.getMin() ,  z.getMax(),  z.getMin(),  h.getMax(),  h.getMin(), s.getHour() ,  s.getDayOfYear(),  s.getLatitude()));
         log.info("dassadasdasdadsasdsda");
-        return param;
+        return jsonObject1;
     }
 
     @RequestMapping(value = "/category")
@@ -154,12 +157,12 @@ public class MakeController {
 
         inputDataRepository.save(inputdata);
 
-        HashMap<String, JSONObject> param = unity(inputdata.getLabelNameList().replaceAll(" ",""),x,y,z,hue,sunAngle);
+        JSONObject param = unity(inputdata.getLabelNameList().replaceAll(" ",""),x,y,z,hue,sunAngle);
 //        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
 //        param.add("test","test");
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE,"application/json");
-        HttpEntity<HashMap<String, JSONObject>> entity = new HttpEntity<>(param, headers);
+        HttpEntity<JSONObject> entity = new HttpEntity<>(param, headers);
         RestTemplate rt = new RestTemplate();
         log.info(param.toString());
         ResponseEntity<String> response = rt.exchange(
