@@ -56,17 +56,27 @@ public class MakeController {
     SenarioRepository senarioRepository;
 
 
-    public MultiValueMap<String,String> unity(String labelname, X x, Y y, Z z, Hue h, SunAngle s) throws SQLException, JsonProcessingException {
+    public HashMap<String,JSONObject> unity(String labelname, X x, Y y, Z z, Hue h, SunAngle s) throws SQLException, JsonProcessingException, ParseException {
         log.info("      temp 실행");
         JSONObject jsonObject = new JSONObject();
-        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
+        HashMap<String, JSONObject> param = new HashMap<>();
         Gson gson = new Gson();
+
         String t = gson.toJson(new Labels_json(labelname));
-        param.add("labels_json",t);
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse( t );
+        JSONObject jsonObj = (JSONObject) obj;
+        System.out.println(t);
+        param.put("labels_json",jsonObj);
+        System.out.println(param.get("labels_json").toString());
         t = gson.toJson(new Sementic_json(labelname));
-        param.add("semantic_json",t);
+        obj = parser.parse( t );
+        jsonObj = (JSONObject) obj;
+        param.put("semantic_json",jsonObj);
         t = gson.toJson(new Random_json(x.getMax(), x.getMin(),  y.getMax(),  y.getMin() ,  z.getMax(),  z.getMin(),  h.getMax(),  h.getMin(), s.getHour() ,  s.getDayOfYear(),  s.getLatitude()));
-        param.add("random_json",t);
+        obj = parser.parse( t );
+        jsonObj = (JSONObject) obj;
+        param.put("random_json",jsonObj);
 
         ObjectMapper mapper = new ObjectMapper();
 //        param.add("label_json",new Labels_json(labelname).toString());
@@ -144,12 +154,12 @@ public class MakeController {
 
         inputDataRepository.save(inputdata);
 
-        MultiValueMap<String, String> param = unity(inputdata.getLabelNameList().replaceAll(" ",""),x,y,z,hue,sunAngle);
+        HashMap<String, JSONObject> param = unity(inputdata.getLabelNameList().replaceAll(" ",""),x,y,z,hue,sunAngle);
 //        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
 //        param.add("test","test");
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE,"application/json");
-        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(param, headers);
+        HttpEntity<HashMap<String, JSONObject>> entity = new HttpEntity<>(param, headers);
         RestTemplate rt = new RestTemplate();
         log.info(param.toString());
         ResponseEntity<String> response = rt.exchange(
