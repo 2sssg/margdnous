@@ -59,10 +59,13 @@ public class MakeController {
     public JSONObject unity(String labelname, X x, Y y, Z z, Hue h, SunAngle s) throws SQLException, JsonProcessingException, ParseException {
         log.info("      temp 실행");
         JSONObject jsonObject = new JSONObject();
-        HashMap<String, JSONObject> param = new HashMap<>();
+        JSONObject param = new JSONObject();
         Gson gson = new Gson();
+        JSONObject jsonObject1 = new JSONObject();
 
         String t = gson.toJson(new Labels_json(labelname));
+        jsonObject1.put("labels_json",new Labels_json(labelname));
+
         JSONParser parser = new JSONParser();
         Object obj = parser.parse( t );
         JSONObject jsonObj = (JSONObject) obj;
@@ -70,10 +73,14 @@ public class MakeController {
         param.put("labels_json",jsonObj);
         System.out.println(param.get("labels_json").toString());
         t = gson.toJson(new Sementic_json(labelname));
+        jsonObject1.put("semantic_json",t);
+
         obj = parser.parse( t );
         jsonObj = (JSONObject) obj;
         param.put("semantic_json",jsonObj);
         t = gson.toJson(new Random_json(x.getMax(), x.getMin(),  y.getMax(),  y.getMin() ,  z.getMax(),  z.getMin(),  h.getMax(),  h.getMin(), s.getHour() ,  s.getDayOfYear(),  s.getLatitude()));
+        jsonObject1.put("random_json",t);
+
         obj = parser.parse( t );
         jsonObj = (JSONObject) obj;
         param.put("random_json",jsonObj);
@@ -85,12 +92,8 @@ public class MakeController {
 //        jsonObject.put("label_json",new Labels_json(labelname));
 //        jsonObject.put("sementic_json",new Sementic_json(labelname));
 //        jsonObject.put("random_json",new Random_json(x.getMax(), x.getMin(),  y.getMax(),  y.getMin() ,  z.getMax(),  z.getMin(),  h.getMax(),  h.getMin(), s.getHour() ,  s.getDayOfYear(),  s.getLatitude()));
-        JSONObject jsonObject1 = new JSONObject();
-        jsonObject1.put("labels_json",new Labels_json(labelname));
-        jsonObject1.put("semantic_json",new Sementic_json(labelname));
-        jsonObject1.put("random_json",new Random_json(x.getMax(), x.getMin(),  y.getMax(),  y.getMin() ,  z.getMax(),  z.getMin(),  h.getMax(),  h.getMin(), s.getHour() ,  s.getDayOfYear(),  s.getLatitude()));
         log.info("dassadasdasdadsasdsda");
-        return jsonObject1;
+        return param;
     }
 
     @RequestMapping(value = "/category")
